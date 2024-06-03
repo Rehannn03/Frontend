@@ -4,7 +4,6 @@ import App from './App.jsx'
 import './index.css'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Products from './Pages/Products.jsx'
-import Home from './Pages/Home.jsx'
 import Cart from './Pages/Cart.jsx'
 import { CartProvider } from './context/CartContext'  
 // const router = createBrowserRouter(

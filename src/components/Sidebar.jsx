@@ -1,112 +1,81 @@
-import React from "react";
+import React, { useState,useEffect} from 'react';
 
-function Sidebar() {
+
+const products=await fetch('https://raw.githubusercontent.com/RehannS/t-shirt-data/main/t-shirt.json?token=GHSAT0AAAAAACTD3LHGZBJLT7V5ALHLRQXWZS563XA')
+.then(res=>res.json())
+const Sidebar = ({ filters, setFilters }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [availableColors, setAvailableColors] = useState([]);
+  const [availableTypes, setAvailableTypes] = useState([]);
+
+  useEffect(() => {
+    // Extract unique colors and types from the products data
+    const colors = [...new Set(products.map(tshirt => tshirt.color))];
+    const types = [...new Set(products.map(tshirt => tshirt.type))];
+    setAvailableColors(colors);
+    setAvailableTypes(types);
+  }, []);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [name]: value,
+    }));
+  };
+  
   return (
-    <div>
-      <div className="py-20 bg-gray-100">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-wrap -mx-3 mb-24">
-            <div className="w-full lg:hidden px-3">
-              <div className="flex flex-wrap -mx-2">
-                <div className="w-1/2 md:w-1/3 px-2 mb-4">
-                  <div className="py-6 px-2 text-center bg-gray-50">
-                    <a className="font-bold font-heading" href="#">
-                      Category
-                    </a>
-                    <ul className="hidden text-left mt-6">
-                      <li className="mb-4">
-                        <a href="#">New in</a>
-                      </li>
-                      <li className="mb-4">
-                        <a href="#">Activewear</a>
-                      </li>
-                      <li className="mb-4">
-                        <a href="#">Hoodies & Sweatshirts</a>
-                      </li>
-                      <li className="mb-4">
-                        <a href="#">Jackets</a>
-                      </li>
-                      <li className="mb-4">
-                        <a href="#">Multipacks</a>
-                      </li>
-                      <li className="mb-4">
-                        <a href="#">Bags</a>
-                      </li>
-                      <li className="mb-4">
-                        <a href="#">Sports</a>
-                      </li>
-                      <li className="mb-4">
-                        <a href="#">Gifts</a>
-                      </li>
-                      <li>
-                        <a href="#">Notes</a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div className="w-1/2 md:w-1/3 px-2 mb-4">
-                  <div className="py-6 px-2 text-center bg-gray-50">
-                    <a className="font-bold font-heading" href="#">
-                      Colors
-                    </a>
-                    <div className="mt-6 flex flex-wrap">
-                      <button className="mr-4 mb-2 rounded-full border border-blue-300 p-1">
-                        <div className="rounded-full bg-blue-300 w-5 h-5"></div>
-                      </button>
-                      <button className="mr-4 mb-2 rounded-full border border-transparent hover:border-gray-300 p-1">
-                        <div className="rounded-full bg-orange-300 w-5 h-5"></div>
-                      </button>
-                      <button className="mr-4 mb-2 rounded-full border border-transparent hover:border-gray-300 p-1">
-                        <div className="rounded-full bg-gray-900 w-5 h-5"></div>
-                      </button>
-                      <button className="mr-4 mb-2 rounded-full border border-transparent hover:border-gray-300 p-1">
-                        <div className="rounded-full bg-red-300 w-5 h-5"></div>
-                      </button>
-                      <button className="mr-4 mb-2 rounded-full border border-transparent hover:border-gray-300 p-1">
-                        <div className="rounded-full bg-green-300 w-5 h-5"></div>
-                      </button>
-                      <button className="mr-4 mb-2 rounded-full border border-transparent hover:border-gray-300 p-1">
-                        <div className="rounded-full bg-pink-300 w-5 h-5"></div>
-                      </button>
-                      <button className="mr-4 mb-2 rounded-full border border-transparent hover:border-gray-300 p-1">
-                        <div className="rounded-full bg-yellow-300 w-5 h-5"></div>
-                      </button>
-                      <button className="mr-4 mb-2 rounded-full border border-transparent hover:border-gray-300 p-1">
-                        <div className="rounded-full bg-gray-100 w-5 h-5"></div>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div className="w-1/2 md:w-1/3 px-2 mb-4">
-                  <div className="py-6 px-4 text-center bg-gray-50">
-                    <a className="font-bold font-heading" href="#">
-                      Price
-                    </a>
-                    <div className="hidden mt-6">
-                      <input
-                        className="w-full mb-4 outline-none appearance-none bg-gray-100 h-1 rounded cursor-pointer"
-                        type="range"
-                        min="1"
-                        max="100"
-                        value="50"
-                      />
-                      <div className="flex justify-between" />
-                      <span className="inline-block text-lg font-bold font-heading text-blue-300">
-                        $0
-                      </span>
-                      <span className="inline-block text-lg font-bold font-heading text-blue-300">
-                        $289
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+    <div className="md:w-1/4 w-full md:static fixed bg-white md:bg-transparent z-50 md:z-auto transform md:transform-none transition-transform duration-300 ease-in-out md:translate-x-0" style={{ top: 0, left: 0 }}>
+      <button
+        className="md:hidden p-2 text-gray-800 bg-gray-200 rounded focus:outline-none focus:bg-gray-300"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        {isOpen ? 'Close Filters' : 'Open Filters'}
+      </button>
+      <div className={`p-4 bg-white shadow-lg rounded-lg ${isOpen ? 'block' : 'hidden'} md:block`}>
+        <h2 className="text-xl font-semibold mb-4">Filters</h2>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-1">Gender</label>
+          <select name="gender" onChange={handleChange} className="w-full p-2 border rounded">
+            <option value="">All</option>
+            <option value="Men">Men</option>
+            <option value="Women">Women</option>
+          </select>
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-1">Color</label>
+          <select name="color" onChange={handleChange} className="w-full p-2 border rounded">
+            <option value="">All</option>
+            {availableColors.map(color => (
+              <option key={color} value={color}>{color}</option>
+            ))}
+          </select>
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-1">Price Range</label>
+          <select name="priceRange" onChange={handleChange} className="w-full p-2 border rounded">
+            <option value="">All</option>
+            <option value="0-500">0 - 500</option>
+            <option value="501-1000">501 - 1000</option>
+            <option value="1001-2000">1001 - 2000</option>
+            <option value="2001-5000">2001 - 5000</option>
+          </select>
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-1">Type</label>
+          <select name="type" onChange={handleChange} className="w-full p-2 border rounded">
+            <option value="">All</option>
+            {availableTypes.map(type => (
+              <option key={type} value={type}>{type}</option>
+            ))}
+          </select>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default Sidebar;

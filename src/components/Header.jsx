@@ -1,6 +1,7 @@
 import React from "react";
 import { CartGlobal } from "@/context/CartContext";
-function Header() {
+import { Link } from "react-router-dom";
+function Header({setSearch}) {
   const { cart } = CartGlobal();
   return (
     <section class="w-full bg-slate-100 ">
@@ -9,10 +10,11 @@ function Header() {
           <h2 class="text-4xl font-thin">T-Hub</h2>
         </div>
         <div class="w-full  lg:w-auto flex items-center py-2 px-4  md:mb-0 md:mr-4 md:ml-auto border rounded bg-white">
-          <input
-            class="text-sm placeholder-gray-500"
+        <input
+            className="text-sm placeholder-gray-500"
             type="text"
             placeholder="Type to search..."
+            onChange={(e) => setSearch(e.target.value)}
           />
           <button class="ml-auto">
             <svg
@@ -29,9 +31,9 @@ function Header() {
             </svg>
           </button>
         </div>
-        <a
+        <Link
           class="md:w-auto flex items-center py-2 px-5  text-white text-sm font-medium"
-          href="/cart"
+          to="/cart"
         >
           <svg
             class="w-8 h-8 text-gray-800 dark:text-white"
@@ -51,7 +53,7 @@ function Header() {
             />
           </svg>
         <span className="text-md text-black mt-2 rounded-lg">{cart.length}</span>
-        </a>
+        </Link>
       </div>
     </section>
   );
