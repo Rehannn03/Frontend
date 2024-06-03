@@ -1,35 +1,33 @@
 import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
-import { useContext ,useState} from "react";
+import { useContext ,useState,useEffect} from "react";
 import Sidebar from "./Sidebar";
-// const products = [
-//   {
-//     title: "Polo Shirt",
-//     image: tShirt,
-//     price: 20,
-//   },
-//   {
-//     title: "Plain t-shirt",
-//     image: rightImage,
-//     price: 30,
-//   },
-// ];
-
-const products= await fetch('https://raw.githubusercontent.com/RehannS/t-shirt-data/main/t-shirt.json?token=GHSAT0AAAAAACTD3LHGZBJLT7V5ALHLRQXWZS563XA')
-.then(res=>res.json())
-.catch(err=>console.log(err))
-
 export default function ProductCard({search}) {
   const {addToCart} =useContext(CartContext)
+  const [products, setProducts] = useState([]);
   const [filters, setFilters] = useState({
     gender: '',
     color: '',
     priceRange: '',
     type: '',
   });
-
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch("https://raw.githubusercontent.com/RehannS/t-shirt-data/main/t-shirt.json?token=GHSAT0AAAAAACTD3LHHYQXBXPRQGPJFDZXSZS6BA6Q");
+        const products = await response.json();
+        console.log(products);
+        setProducts(products);
+        // Now that we have the products, you can set them in state or perform any other necessary actions
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+    fetchData();
+  }, []); // Run only once on component mount
   const filterProducts = (products) => {
+      
     return products.filter((product) => {
       const [minPrice, maxPrice] = filters.priceRange.split('-').map(Number);
       return (

@@ -1,13 +1,25 @@
 import React, { useState,useEffect} from 'react';
 
 
-const products=await fetch('https://raw.githubusercontent.com/RehannS/t-shirt-data/main/t-shirt.json?token=GHSAT0AAAAAACTD3LHGZBJLT7V5ALHLRQXWZS563XA')
-.then(res=>res.json())
+
 const Sidebar = ({ filters, setFilters }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [availableColors, setAvailableColors] = useState([]);
   const [availableTypes, setAvailableTypes] = useState([]);
-
+  const [products, setProducts] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch("https://raw.githubusercontent.com/RehannS/t-shirt-data/main/t-shirt.json?token=GHSAT0AAAAAACTD3LHHYQXBXPRQGPJFDZXSZS6BA6Q");
+        const products = await response.json();
+        setProducts(products);
+        // Now that we have the products, you can set them in state or perform any other necessary actions
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+    fetchData();
+  }, []); // Run only once on component mount
   useEffect(() => {
     // Extract unique colors and types from the products data
     const colors = [...new Set(products.map(tshirt => tshirt.color))];
