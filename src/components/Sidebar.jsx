@@ -14,15 +14,15 @@ const Sidebar = ({ filters, setFilters }) => {
         const products = await response.json();
         setProducts(products);
         // Now that we have the products, you can set them in state or perform any other necessary actions
+        const colors = [...new Set(products.map(tshirt => tshirt.color))];
+        const types = [...new Set(products.map(tshirt => tshirt.type))];
+        setAvailableColors(colors);
+        setAvailableTypes(types);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     }
     fetchData();
-    const colors = [...new Set(products.map(tshirt => tshirt.color))];
-    const types = [...new Set(products.map(tshirt => tshirt.type))];
-    setAvailableColors(colors);
-    setAvailableTypes(types);
   }, []); 
   const handleChange = (e) => {
     const { name, value } = e.target;
