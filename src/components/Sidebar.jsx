@@ -19,14 +19,11 @@ const Sidebar = ({ filters, setFilters }) => {
       }
     }
     fetchData();
-  }, []); // Run only once on component mount
-  useEffect(() => {
-    // Extract unique colors and types from the products data
     const colors = [...new Set(products.map(tshirt => tshirt.color))];
     const types = [...new Set(products.map(tshirt => tshirt.type))];
     setAvailableColors(colors);
     setAvailableTypes(types);
-  }, []);
+  }, []); 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFilters((prevFilters) => ({
